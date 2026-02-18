@@ -1,16 +1,79 @@
-# React + Vite
+# 🚀 Profile Management Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern frontend application for managing user profiles, built with React, Tailwind CSS, and Vite.
 
-Currently, two official plugins are available:
+🔗 Repository: https://github.com/godwin845/profile-management-frontend
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 📌 Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This project is the frontend of the Profile Management System. It provides an intuitive and responsive user interface that allows users to:
 
-## Expanding the ESLint configuration
+- View profile information
+- Edit personal details
+- Manage skills, experience, and social links
+- Authenticate using JWT-based login system
+- Interact with a secure backend API
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ⭐ Features
+
+- ⚛️ Built with React + Tailwind CSS
+- ⚡ Powered by Vite (Fast HMR & optimized builds)
+- 🔐 JWT Authentication integration
+- 🧠 Redux Toolkit for state management
+- 🎨 Clean and responsive UI
+- 🛠️ ESLint configured for clean code
+- 🌙 Modern component-based architecture
+
+---
+
+## 🛠️ Tech Stack
+
+- React
+- Tailwind CSS
+- Vite
+- Redux Toolkit
+- Axios
+- ESLint
+
+---
+
+## 📂 Project Structure
+
+src/
+├── Auth/
+├── components/
+├── Navbar/
+├── pages/
+├── redux/
+├── App.jsx
+├── Home.jsx
+├── index.css
+└── main.jsx
+
+
+---
+
+## 📦 Installation
+
+Make sure you have **Node.js (v16 or later)** installed.
+
+### 1️⃣ Clone the repository
+
+git clone https://github.com/godwin845/profile-management-frontend.git
+cd profile-management-frontend
+
+
+## Install dependencies
+
+npm install
+
+
+## Run server
+
+npm run dev
+
+---

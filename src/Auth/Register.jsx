@@ -60,7 +60,7 @@ const RegisterPage= () => {
 
     try {
       // Replace with your backend endpoint
-      const response = await axios.post("http://localhost:5000/api/auth/register", {
+      const response = await axios.post("https://profile-management-backend-2jxo.onrender.com/api/auth/register", {
         firstName: formData.firstName,
         lastName: formData.lastName, 
         email: formData.email,

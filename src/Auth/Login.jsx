@@ -5,18 +5,19 @@ import axios from "axios";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("");                                                                                                           
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     setLoading(true);
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://profile-management-backend-2jxo.onrender.com/api/auth/login",
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       );
