@@ -8,7 +8,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 const TopNavbar = () => {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const [profileOpen, setProfileOpen] = useState(false);
@@ -31,36 +30,30 @@ const TopNavbar = () => {
 
   // Profile dropdown outside click
   useEffect(() => {
+    if (!profileOpen) return;
+
     const handleClickOutside = (event) => {
-      if (
-        profileRef.current &&
-        !profileRef.current.contains(event.target)    
-      ) {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
         setProfileOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [profileOpen]);
 
   // Mobile menu outside click
   useEffect(() => {
     if (!mobileOpen) return;
 
     const handleClickOutside = (event) => {
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target)
-      ) {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
         closeMobileMenu();
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [mobileOpen]);
 
   const toggleProfile = () => setProfileOpen(!profileOpen);
@@ -70,22 +63,23 @@ const TopNavbar = () => {
     e.preventDefault();
     dispatch(logout());
     closeProfile();
-    navigate('/')
+    navigate("/");
   };
 
   return (
     <div
       className={`
-      ${
-        darkMode
-          ? "bg-linear-to-r from-slate-900 via-gray-900 to-slate-900 shadow-2xl border-b border-slate-800/50 backdrop-blur-xl"
-          : "bg-linear-to-r from-white via-slate-50/50 to-white shadow-2xl border-b border-slate-200/60 backdrop-blur-xl"
-      }
-      sticky top-0 z-50 w-full transition-all duration-500
-    `}
+        ${
+          darkMode
+            ? "bg-linear-to-r from-slate-900 via-gray-900 to-slate-900 shadow-2xl border-b border-slate-800/50 backdrop-blur-xl"
+            : "bg-linear-to-r from-white via-slate-50/50 to-white shadow-2xl border-b border-slate-200/60 backdrop-blur-xl"
+        }
+        sticky top-0 z-50 w-full transition-all duration-500
+      `}
     >
       <div className="h-20 max-w-screen-2xl mx-auto px-6 lg:px-8 flex items-center justify-between relative">
         <div className="flex items-center gap-6 lg:gap-8">
+          {/* Mobile Menu Button */}
           <button
             className={`
               ${
@@ -95,13 +89,7 @@ const TopNavbar = () => {
               } 
               md:hidden group relative p-2 rounded-2xl hover:bg-slate-200/50 dark:hover:bg-slate-800/50 backdrop-blur-sm transition-all duration-300 hover:scale-110
             `}
-            onClick={() => {
-              if (mobileOpen) {
-                closeMobileMenu();
-              } else {
-                setMobileOpen(true);
-              }
-            }}
+            onClick={() => (mobileOpen ? closeMobileMenu() : setMobileOpen(true))}
           >
             <div className="relative">
               {mobileOpen ? <X size={24} /> : <Menu size={24} />}
@@ -109,6 +97,7 @@ const TopNavbar = () => {
             </div>
           </button>
 
+          {/* Logo */}
           <a
             href="#"
             className="group relative h-12 w-36 lg:w-40 flex items-center overflow-hidden"
@@ -118,6 +107,7 @@ const TopNavbar = () => {
             </span>
           </a>
 
+          {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-1 lg:gap-2 ml-4">
             {[
               { to: "#", label: "Jobs" },
@@ -136,10 +126,11 @@ const TopNavbar = () => {
           </div>
         </div>
 
+        {/* Right Side */}
         <div className="flex items-center gap-3 lg:gap-4">
           <ToggleButton />
 
-          {isAuthenticated ? (
+          {isAuthenticated && user ? (
             <div ref={profileRef} className="relative">
               <div
                 className="flex items-center gap-3 p-3 rounded-3xl cursor-pointer select-none
@@ -150,9 +141,8 @@ const TopNavbar = () => {
               >
                 <div className="w-12 h-12 rounded-3xl bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500
                   flex items-center justify-center text-white font-bold text-lg shadow-2xl ring-2 ring-white/50">
-                  {user?.firstName?.charAt(0).toUpperCase() || "G"}
+                  {user.firstName.charAt(0).toUpperCase()}
                 </div>
-
                 <ChevronDown
                   size={18}
                   className={`transition-transform duration-500 ${
@@ -163,32 +153,23 @@ const TopNavbar = () => {
 
               {profileOpen && (
                 <div
-
                   className={`
-                  absolute right-0 top-20 w-72
-                  ${
-                    darkMode
-                      ? "bg-slate-900/95 border border-slate-800/60"
-                      : "bg-white/95 border border-slate-200/60"
-                  }
-                  rounded-3xl z-9999 overflow-hidden shadow-2xl
-                `}
+                    absolute right-0 top-20 w-72
+                    ${
+                      darkMode
+                        ? "bg-slate-900/95 border border-slate-800/60"
+                        : "bg-white/95 border border-slate-200/60"
+                    }
+                    rounded-3xl z-9999 overflow-hidden shadow-2xl
+                  `}
                 >
-                  <div className="p-6 border-b">
-                    <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 bg-linear-to-br from-indigo-500 to-purple-600 rounded-3xl flex items-center justify-center text-white font-bold text-xl">
-                        {user?.firstName?.charAt(0).toUpperCase() || "G"}
-                      </div>
-                      <div>
-                        <h4 className="font-black text-xl truncate">
-                          {user
-                            ? `${user.firstName} ${user.lastName}`
-                            : "Guest"}
-                        </h4>
-                        <p className="text-sm truncate">
-                          {user?.email || "Not Logged In"}
-                        </p>
-                      </div>
+                  <div className="p-6 border-b flex items-center gap-4">
+                    <div className="w-14 h-14 bg-linear-to-br from-indigo-500 to-purple-600 rounded-3xl flex items-center justify-center text-white font-bold text-xl">
+                      {user.firstName.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <h4 className="font-black text-xl truncate">{`${user.firstName} ${user.lastName}`}</h4>
+                      <p className="text-sm truncate">{user.email}</p>
                     </div>
                   </div>
 
@@ -211,7 +192,7 @@ const TopNavbar = () => {
             </div>
           ) : (
             <Link
-              to='/'
+              to="/"
               className="px-3 py-3 lg:px-6 lg:py-3 hover:scale-[1.02] hover:-translate-y-0.5 rounded-2xl font-semibold bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-500 text-white transition-all duration-300"
             >
               Login
@@ -220,18 +201,16 @@ const TopNavbar = () => {
         </div>
       </div>
 
+      {/* Mobile Menu */}
       {(mobileOpen || isClosing) &&
         createPortal(
           <div className="fixed inset-0 z-100 md:hidden">
-            {/* Overlay */}
             <div
               className={`absolute inset-0 top-20 transition-opacity duration-300 ${
                 mobileOpen && !isClosing ? "opacity-100" : "opacity-0"
               } ${darkMode ? "bg-black/60" : "bg-slate-900/40"} backdrop-blur-sm`}
               onClick={closeMobileMenu}
             />
-
-            {/* Sidebar */}
             <div
               ref={mobileMenuRef}
               className={`absolute left-0 top-20 bottom-0 w-72 max-w-[85vw]
@@ -274,13 +253,7 @@ const TopNavbar = () => {
   );
 };
 
-const NavLink = ({
-  to,
-  label,
-  mobile,
-  darkMode,
-  onNavigate,
-}) => (
+const NavLink = ({ to, label, mobile, darkMode, onNavigate }) => (
   <Link
     to={to}
     onClick={onNavigate}
@@ -303,13 +276,7 @@ const NavLink = ({
   </Link>
 );
 
-const GradientDropdownLink = ({
-  to,
-  onClick,
-  icon,
-  label,
-  danger,
-}) => (
+const GradientDropdownLink = ({ to, onClick, icon, label, danger }) => (
   <Link
     to={to}
     onClick={onClick}

@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 import axios from "axios";
+import { login } from "../redux/authSlice";
+import { useDispatch } from "react-redux";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");                                                                                                           
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,6 +32,8 @@ const LoginPage = () => {
       // Save token (and optionally user data)
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
+
+      dispatch(login({ user, token }));
 
       navigate("/profile");
     } catch (err) {
