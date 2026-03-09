@@ -17,7 +17,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://profile-management-backend-2jxo.onrender.com/api/auth/login",
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       );
