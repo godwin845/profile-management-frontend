@@ -13,7 +13,7 @@ const EducationManager = () => {
   }, []);
 
   const fetchEducation = async () => {
-    const res = await axios.get("http://localhost:5000/api/education");
+    const res = await axios.get("https://profile-management-backend-2jxo.onrender.com/api/education");
     setEducationList(res.data);
   };
 
@@ -23,12 +23,12 @@ const EducationManager = () => {
         const id = educationList[editingIndex]._id;
 
         await axios.put(
-          `http://localhost:5000/api/education/${id}`,
+          `https://profile-management-backend-2jxo.onrender.com/api/education/${id}`,
           eduData
         );
       } else {
         await axios.post(
-          "http://localhost:5000/api/education",
+          "https://profile-management-backend-2jxo.onrender.com/api/education",
           eduData
         );
       }
@@ -57,7 +57,7 @@ const EducationManager = () => {
       const id = educationList[index]._id;
 
       await axios.delete(
-        `http://localhost:5000/api/education/${id}`
+        `https://profile-management-backend-2jxo.onrender.com/api/education/${id}`
       );
 
       fetchEducation();

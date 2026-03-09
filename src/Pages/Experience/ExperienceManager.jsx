@@ -15,7 +15,7 @@ const ExperienceManager = () => {
   const fetchExperiences = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/experience"
+        "https://profile-management-backend-2jxo.onrender.com/api/experience"
       );
       setExperiences(res.data);
     } catch (error) {
@@ -29,12 +29,12 @@ const ExperienceManager = () => {
         const id = experiences[editingIndex]._id;
 
         await axios.put(
-          `http://localhost:5000/api/experience/${id}`,
+          `https://profile-management-backend-2jxo.onrender.com/api/experience/${id}`,
           data
         );
       } else {
         await axios.post(
-          "http://localhost:5000/api/experience",
+          "https://profile-management-backend-2jxo.onrender.com/api/experience",
           data
         );
       }
@@ -62,7 +62,7 @@ const ExperienceManager = () => {
       const id = experiences[index]._id;
 
       await axios.delete(
-        `http://localhost:5000/api/experience/${id}`
+        `https://profile-management-backend-2jxo.onrender.com/api/experience/${id}`
       );
 
       fetchExperiences();

@@ -3,7 +3,7 @@ import { PlusIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import SkillsModal from "./SkillsModal";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/skills"; // your backend endpoint
+const API_URL = "https://profile-management-backend-2jxo.onrender.com/api/skills"; // your backend endpoint
 
 const SkillsManager = () => {
   const [skills, setSkills] = useState([]);

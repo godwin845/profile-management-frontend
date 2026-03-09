@@ -3,7 +3,7 @@ import { PlusIcon, TrophyIcon } from "@heroicons/react/24/outline";
 import AddCertificateModal from "./AddCertificationDialog";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/certificates"; // your backend endpoint
+const API_URL = "https://profile-management-backend-2jxo.onrender.com/api/certificates"; // your backend endpoint
 
 const CertificateManager = () => {
   const [certificates, setCertificates] = useState([]);
