@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { XMarkIcon, SparklesIcon } from "@heroicons/react/24/solid";
-import axios from "axios";
 
 const predefinedSkills = [
   "React", "JavaScript", "TypeScript", "Node.js", "Express.js",
@@ -9,16 +8,32 @@ const predefinedSkills = [
   "Django", "Flutter",
 ];
 
-const SkillsModal = ({ open, onClose, onSave }) => {
+const SkillsModal = ({ open, onClose, onSave, initialSkills = [] }) => {
   const [skills, setSkills] = useState([]);
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Load initial skills when modal opens
+  useEffect(() => {
+    if (open) {
+      setSkills(initialSkills);
+      setValue("");
+      setLoading(false);
+    } else {
+      setSkills([]);
+      setValue("");
+      setLoading(false);
+    }
+  }, [open, initialSkills]);
+
   const removeSkill = (skillToRemove) => {
+    if (loading) return;
     setSkills((prev) => prev.filter((s) => s !== skillToRemove));
   };
 
   const addSkill = (skill) => {
+    if (loading) return;
+
     const trimmed = skill.trim();
     if (trimmed && !skills.includes(trimmed)) {
       setSkills((prev) => [...prev, trimmed]);
@@ -27,33 +42,30 @@ const SkillsModal = ({ open, onClose, onSave }) => {
   };
 
   const handleSave = async () => {
-    if (skills.length === 0) return;
+    if (skills.length === 0 || loading) return;
 
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
 
-      // 🔥 Axios POST request to save skills
-      await axios.post(
-        "http://localhost:5000/api/profile/skills",
-        { skills },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      // Simulate API call (replace with real API call)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Optional callback to parent
-      onSave?.(skills);
+      if (onSave) {
+        await onSave(skills);
+      }
 
-      onClose();
-    } catch (err) {
-      console.error("Error saving skills:", err);
-      alert("Failed to save skills. Please try again.");
+      onClose?.();
+    } catch (error) {
+      console.error("Failed to save skills:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const filteredSuggestions = predefinedSkills.filter(
-    (skill) => skill.toLowerCase().includes(value.toLowerCase()) && !skills.includes(skill)
+    (skill) =>
+      skill.toLowerCase().includes(value.toLowerCase()) &&
+      !skills.includes(skill)
   );
 
   if (!open) return null;
@@ -62,7 +74,7 @@ const SkillsModal = ({ open, onClose, onSave }) => {
     <div className="fixed inset-0 z-9999 flex items-center justify-center p-4">
       <div
         className="absolute inset-0 bg-linear-to-br from-slate-900/60 via-indigo-500/20 to-purple-500/20 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={loading ? undefined : onClose}
       />
 
       <div className="relative w-full max-w-lg mx-auto animate-in slide-in-from-bottom-4 fade-in duration-500 max-h-[95vh] overflow-hidden">
@@ -87,7 +99,7 @@ const SkillsModal = ({ open, onClose, onSave }) => {
               </div>
               <button
                 type="button"
-                onClick={onClose}
+                onClick={loading ? undefined : onClose}
                 className="group relative p-2.5 rounded-2xl bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm hover:bg-white dark:hover:bg-slate-700 border border-white/30 dark:border-slate-700/50 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
               >
                 <XMarkIcon className="w-5 h-5 text-slate-600 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors" />
@@ -110,7 +122,8 @@ const SkillsModal = ({ open, onClose, onSave }) => {
                       </span>
                       <button
                         onClick={() => removeSkill(skill)}
-                        className="group-hover/skill:opacity-100 opacity-70 hover:opacity-100 p-1 rounded-xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-md hover:bg-rose-100 dark:hover:bg-rose-500/20 hover:shadow-rose-200/50 transition-all duration-200 hover:scale-110"
+                        disabled={loading}
+                        className="group-hover/skill:opacity-100 opacity-70 hover:opacity-100 p-1 rounded-xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-md hover:bg-rose-100 dark:hover:bg-rose-500/20 hover:shadow-rose-200/50 transition-all duration-200 hover:scale-110 disabled:opacity-40"
                       >
                         <XMarkIcon className="w-4 h-4 text-slate-500 dark:text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 transition-colors" />
                       </button>
@@ -119,6 +132,7 @@ const SkillsModal = ({ open, onClose, onSave }) => {
                 </div>
                 <input
                   value={value}
+                  disabled={loading}
                   onChange={(e) => setValue(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && value.trim()) {
@@ -131,14 +145,14 @@ const SkillsModal = ({ open, onClose, onSave }) => {
                 />
               </div>
 
-              {/* Suggestions */}
               {value && filteredSuggestions.length > 0 && (
-                <div className="absolute z-10 w-full mt-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/60 rounded-3xl shadow-2xl hover:shadow-3xl animate-in slide-in-from-top-2 duration-200 max-h-60 overflow-hidden">
+                <div className="absolute z-10 w-full mt-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/60 rounded-3xl shadow-2xl animate-in slide-in-from-top-2 duration-200 max-h-60 overflow-hidden">
                   {filteredSuggestions.slice(0, 8).map((skill) => (
                     <button
                       key={skill}
                       onClick={() => addSkill(skill)}
-                      className="w-full px-6 py-3.5 text-left hover:bg-linear-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-slate-800/50 dark:hover:to-slate-700/50 transition-all duration-300"
+                      disabled={loading}
+                      className="w-full px-6 py-3.5 text-left hover:bg-linear-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-slate-800/50 dark:hover:to-slate-700/50 transition-all duration-300 disabled:opacity-50"
                     >
                       {skill}
                     </button>
@@ -147,20 +161,22 @@ const SkillsModal = ({ open, onClose, onSave }) => {
               )}
             </div>
 
-            {/* Stats */}
             {skills.length > 0 && (
               <div className="text-center py-4 px-2 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/40 dark:border-slate-700/50 shadow-lg">
                 <p className="text-sm text-slate-600 dark:text-slate-400">
-                  <span className="font-bold text-indigo-600 dark:text-indigo-400">{skills.length}</span> skill{skills.length !== 1 ? "s" : ""} selected
+                  <span className="font-bold text-indigo-600 dark:text-indigo-400">
+                    {skills.length}
+                  </span>{" "}
+                  skill{skills.length !== 1 ? "s" : ""} selected
                 </p>
               </div>
             )}
 
-            {/* Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-white/20 dark:border-slate-800/50">
               <button
                 onClick={onClose}
-                className="flex-1 px-8 py-4 bg-white/70 dark:bg-slate-800/70 text-slate-700 dark:text-slate-300 font-semibold rounded-2xl border border-white/40 dark:border-slate-700/50 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300"
+                disabled={loading}
+                className="flex-1 px-8 py-4 bg-white/70 dark:bg-slate-800/70 text-slate-700 dark:text-slate-300 font-semibold rounded-2xl border border-white/40 dark:border-slate-700/50 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 disabled:opacity-50"
               >
                 Cancel
               </button>

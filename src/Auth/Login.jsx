@@ -17,7 +17,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        "https://profile-management-backend-2jxo.onrender.com/api/auth/login",
+        "http://localhost:5000/api/auth/login",
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -29,6 +29,7 @@ const LoginPage = () => {
       localStorage.setItem("user", JSON.stringify(user));
 
       navigate("/profile");
+      window.location.reload();
     } catch (err) {
       console.error("Login failed:", err);
       alert(err.response?.data?.message || "Login failed. Please try again.");
@@ -47,7 +48,7 @@ const LoginPage = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           </div>
-          <h1 className="text-4xl lg:text-5xl font-black bg-linear-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl lg:text-5xl font-black bg-linear-to-r from-slate-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent mb-4">
             Welcome Back
           </h1>
           <p className="text-xl text-slate-600 font-medium">Sign in to your Profile Management account</p>

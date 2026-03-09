@@ -1,45 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { XMarkIcon, LinkIcon } from "@heroicons/react/24/outline";
-import axios from "axios";
 
-const AddSocialModal = ({
-  open,
-  onClose,
-  onAdd,
-}) => {
-  const [social, setSocial] = useState("Instagram");
-  const [link, setLink] = useState("");
+const AddSocialModal = ({ open, onClose, onAdd, initialData }) => {
+  // Initialize state from initialData when editing
+  const [social, setSocial] = useState(initialData?.social || "Instagram");
+  const [link, setLink] = useState(initialData?.link || "");
   const [loading, setLoading] = useState(false);
+
+  // Update state whenever a new initialData is provided (for editing)
+  useEffect(() => {
+    setSocial(initialData?.social || "Instagram");
+    setLink(initialData?.link || "");
+  }, [initialData]);
 
   if (!open) return null;
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!link.trim()) return;
 
-    try {
-      setLoading(true);
+    setLoading(true);
 
-      const response = await axios.post(
-        "https://profile-management-backend-2jxo.onrender.com/api/socials",
-        {
-          social,
-          link: link.trim(),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+    const newSocial = {
+      id: initialData?.id || Date.now(), // Keep same ID if editing
+      social,
+      link: link.trim(),
+    };
 
-      onAdd?.(response.data);
-      setLink("");
-      onClose();
-    } catch (error) {
-      console.error("Error adding social:", error);
-    } finally {
-      setLoading(false);
-    }
+    onAdd?.(newSocial); // Parent handles add or update
+
+    setLink("");
+    setSocial("Instagram");
+    onClose();
+    setLoading(false);
   };
 
   const socialOptions = [
@@ -53,7 +45,7 @@ const AddSocialModal = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       <div
         className="absolute inset-0 bg-linear-to-br from-slate-900/60 via-indigo-500/20 to-purple-500/20 backdrop-blur-sm transition-all duration-300"
         onClick={onClose}
@@ -72,7 +64,7 @@ const AddSocialModal = ({
                 </div>
                 <div>
                   <h2 className="text-2xl font-black bg-linear-to-r from-slate-900 to-indigo-900 dark:from-slate-100 dark:to-indigo-400 bg-clip-text text-transparent">
-                    Add Social Link
+                    {initialData ? "Edit Social Link" : "Add Social Link"}
                   </h2>
                   <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                     Connect your social profiles
@@ -139,10 +131,11 @@ const AddSocialModal = ({
                 disabled={!link.trim() || loading}
                 className="flex-1 group relative px-8 py-4 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-2xl shadow-2xl hover:shadow-3xl hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                <span>{loading ? "Adding..." : "Add Social Link"}</span>
+                <span>{loading ? "Saving..." : initialData ? "Update Social Link" : "Add Social Link"}</span>
               </button>
             </div>
           </div>
+
         </div>
       </div>
     </div>

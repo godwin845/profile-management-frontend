@@ -26,6 +26,7 @@ const RegisterPage= () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -60,7 +61,7 @@ const RegisterPage= () => {
 
     try {
       // Replace with your backend endpoint
-      const response = await axios.post("https://profile-management-backend-2jxo.onrender.com/api/auth/register", {
+      const response = await axios.post("http://localhost:5000/api/auth/register", {
         firstName: formData.firstName,
         lastName: formData.lastName, 
         email: formData.email,

@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './Home';
-import DeleteAccountPage from './Pages/Profile Header/DeleteAccountPage';
 import TopNavbar from './Navbar/TopNavbar';
 import { useSelector } from 'react-redux';
 import LoginButton from './Auth/Login';
 import RegisterButton from './Auth/Register';
+import ProfilePage from './ProfilePage';
+import DeleteAccountPage from './Pages/DeleteAccount/DeleteAccountPage';
 
 const App = () => {
 
@@ -16,8 +16,8 @@ const App = () => {
       <TopNavbar />
       <Routes>
         <Route path="/" element={<LoginButton />} />
-        <Route path="/register" element={<RegisterButton />} />
-        <Route path="/profile" element={<Home />} />
+        <Route path="/register" element={<RegisterButton />} /> 
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/settings/delete-account" element={<DeleteAccountPage />} />
       </Routes>
     </BrowserRouter>
@@ -25,4 +25,4 @@ const App = () => {
   )
 }
 
-export default App;
+export default App; 

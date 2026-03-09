@@ -26,7 +26,7 @@ const DeleteAccountPage = ({
       setError(null);
 
       const response = await axios.post(
-        "https://profile-management-backend-2jxo.onrender.com/api/account/delete", // Replace with your actual endpoint
+        "/api/account/delete", // Replace with your actual endpoint
         { reason: reason.trim() },
         {
           headers: {
@@ -61,14 +61,14 @@ const DeleteAccountPage = ({
       <div className="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/90 backdrop-blur-xl border-b border-white/40 dark:border-slate-800/50 shadow-sm">
         <div className="max-w-6xl mx-auto px-6 py-6">
           <nav className="flex items-center space-x-2 text-sm">
-            <a
-              href="/"
+            <Link
+              to='/profile'
               className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm hover:bg-white/80 dark:hover:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50 rounded-2xl text-slate-700 dark:text-slate-300 font-medium hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 shadow-sm"
               title="Go back"
             >
               <ArrowLeftIcon className="w-5 h-5" />
               <span>Back</span>
-            </a>
+            </Link>
             
             <div className="flex items-center space-x-1 text-slate-500 dark:text-slate-400">
               {breadcrumbItems.map((item, index) => (

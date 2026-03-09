@@ -4,10 +4,12 @@ import { Menu, X, ChevronDown, User, LogOut } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/authSlice";
 import ToggleButton from "./ToggleButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const TopNavbar = () => {
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -17,9 +19,7 @@ const TopNavbar = () => {
   const mobileMenuRef = useRef(null);
 
   const darkMode = useSelector((state) => state.theme.isDarkMode);
-  const { user, isAuthenticated } = useSelector(
-    (state) => state.auth
-  );
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
 
   const closeMobileMenu = () => {
     setIsClosing(true);
@@ -34,7 +34,7 @@ const TopNavbar = () => {
     const handleClickOutside = (event) => {
       if (
         profileRef.current &&
-        !profileRef.current.contains(event.target)
+        !profileRef.current.contains(event.target)    
       ) {
         setProfileOpen(false);
       }
@@ -70,7 +70,7 @@ const TopNavbar = () => {
     e.preventDefault();
     dispatch(logout());
     closeProfile();
-    window.location.href = "/";
+    navigate('/')
   };
 
   return (
@@ -163,6 +163,7 @@ const TopNavbar = () => {
 
               {profileOpen && (
                 <div
+
                   className={`
                   absolute right-0 top-20 w-72
                   ${
