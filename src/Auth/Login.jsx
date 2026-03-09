@@ -29,7 +29,6 @@ const LoginPage = () => {
       localStorage.setItem("user", JSON.stringify(user));
 
       navigate("/profile");
-      window.location.reload();
     } catch (err) {
       console.error("Login failed:", err);
       alert(err.response?.data?.message || "Login failed. Please try again.");
