@@ -9,7 +9,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       // Replace this with your actual data fetching
-      await new Promise((resolve) => setTimeout(resolve, 2000));  
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       setLoading(false);
     };
     fetchData();

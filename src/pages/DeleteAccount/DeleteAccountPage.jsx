@@ -4,8 +4,10 @@ import {
   ArrowLeftIcon,
   ChevronRightIcon
 } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import api from "../../services/api";
+import { logout } from "../../redux/authSlice";
 
 const DeleteAccountPage = ({
   onSubmit,
@@ -14,6 +16,9 @@ const DeleteAccountPage = ({
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async () => {
     if (!reason.trim()) {
@@ -25,19 +30,16 @@ const DeleteAccountPage = ({
       setLoading(true);
       setError(null);
 
-      const response = await axios.post(
-        "/api/account/delete", // Replace with your actual endpoint
-        { reason: reason.trim() },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            // "Authorization": `Bearer ${token}`, // Uncomment if your API requires auth
-          },
-        }
-      );
+      const response = await api.post("/account/delete", {
+        reason: reason.trim(),
+      });
 
       console.log("Delete request submitted:", response.data);
+
+      // Clear auth state and redirect to login
+      dispatch(logout());
       onSubmit?.(reason.trim());
+      navigate("/", { replace: true });
     } catch (err) { 
       console.error("Deletion failed:", err);
       setError(
@@ -172,7 +174,10 @@ const DeleteAccountPage = ({
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-white/20 dark:border-slate-800/50">
                 <button
-                  onClick={onCancel}
+                  onClick={() => {
+                    onCancel?.();
+                    navigate("/profile");
+                  }}
                   className="flex-1 group relative px-10 py-5 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl text-slate-700 dark:text-slate-300 font-bold rounded-3xl border border-white/50 dark:border-slate-700/50 shadow-2xl hover:shadow-3xl hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-400 focus:outline-none focus:ring-4 focus:ring-emerald-500/40"
                 >
                   <span>Cancel</span>

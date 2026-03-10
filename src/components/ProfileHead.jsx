@@ -14,6 +14,9 @@ import useSocialLinksManager from "../hooks/useSocialLinksManager";
 import useCareerVisionManager from "../hooks/useCareerVisionManager";
 
 const Parent = () => {
+
+  const API_URL = "https://profile-management-backend-2jxo.onrender.com";
+  // const API_URL = "http://localhost:5000";
   
   const socialManager = useSocialLinksManager();
   const careerManager = useCareerVisionManager();
@@ -138,7 +141,7 @@ const Parent = () => {
               <div className="flex items-center gap-4 mb-4 sm:mb-0">
                 {" "}
                 <img
-                  src={`https://profile-management-backend-2jxo.onrender.com${p.profileImage}`}
+                  src={`${API_URL}${p.profileImage}`}
                   alt="Profile"
                   className="w-14 h-14 rounded-full object-cover"
                 />{" "}
@@ -160,7 +163,7 @@ const Parent = () => {
                   )}{" "}
                   {p.resumeFile && (
                     <a
-                      href={`https://profile-management-backend-2jxo.onrender.com${p.resumeFile}`}
+                      href={`${API_URL}${p.resumeFile}`}
                       target="_blank"
                       rel="noreferrer"
                     >
