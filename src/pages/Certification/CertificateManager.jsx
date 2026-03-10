@@ -1,43 +1,40 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { PlusIcon, TrophyIcon } from "@heroicons/react/24/outline";
 import AddCertificateModal from "./AddCertificationDialog";
-import axios from "axios";
-
-const API_URL = "https://profile-management-backend-2jxo.onrender.com/api/certificates"; // your backend endpoint
+import { addCertificate, deleteCertificate, getCertificates, updateCertificate } from "../../services/certificateApi";
 
 const CertificateManager = () => {
   const [certificates, setCertificates] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
 
-  // Fetch certificates from server
-  const fetchCertificates = async () => {
-    try {
-      const response = await axios.get(API_URL);
-      setCertificates(response.data);
-    } catch (err) {
-      console.error("Error fetching certificates:", err);
-    }
-  };
 
   useEffect(() => {
     fetchCertificates();
   }, []);
 
+  // Fetch certificates from server
+  const fetchCertificates = async () => {
+    try {
+      const data = await getCertificates();
+      setCertificates(data);
+    } catch (err) {
+      console.error("Error fetching certificates:", err);
+    }
+  };
+
   // Add or Edit certificate
   const handleAddOrEditCertificate = async (data) => {
     try {
       if (editingIndex !== null) {
-        // Update existing certificate
         const id = certificates[editingIndex]._id;
-        await axios.put(`${API_URL}/${id}`, data);
+        await updateCertificate(id, data);
       } else {
-        // Add new certificate
-        await axios.post(API_URL, data);
+        await addCertificate(data);
       }
       setEditingIndex(null);
       setModalOpen(false);
-      fetchCertificates(); // refresh list
+      fetchCertificates();
     } catch (err) {
       console.error("Error saving certificate:", err);
     }
@@ -51,15 +48,11 @@ const CertificateManager = () => {
 
   // Delete certificate
   const handleDeleteClick = async (index) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this certificate?"
-    );
-    if (!confirmDelete) return;
-
+    if (!window.confirm("Are you sure you want to delete this certificate?")) return;
     try {
       const id = certificates[index]._id;
-      await axios.delete(`${API_URL}/${id}`);
-      fetchCertificates(); // refresh list
+      await deleteCertificate(id);
+      fetchCertificates();
     } catch (err) {
       console.error("Error deleting certificate:", err);
     }

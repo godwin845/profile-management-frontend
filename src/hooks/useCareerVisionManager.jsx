@@ -3,7 +3,7 @@ import {
   createCareerVision,
   getCareerVision,
   updateCareerVision,
-} from "../../api/careerApi";
+} from "../services/careerApi";
 
 const useCareerVisionManager = () => {
   const [careerVision, setCareerVisionState] = useState(null);

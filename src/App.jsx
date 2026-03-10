@@ -1,10 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import TopNavbar from './Navbar/TopNavbar';
 import { useSelector } from 'react-redux';
-import LoginButton from './Auth/Login';
-import RegisterButton from './Auth/Register';
-import ProfilePage from './ProfilePage';
-import DeleteAccountPage from './Pages/DeleteAccount/DeleteAccountPage';
+import TopNavbar from './navbar/TopNavbar';
+import RoutesConfig from './routes/RoutesConfig';
 
 const App = () => {
 
@@ -13,16 +10,11 @@ const App = () => {
   return (
     <div className={`${isDarkMode ? 'bg-slate-900/90 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-800/50' : 'bg-amber-100'} min-h-screen`}>
       <BrowserRouter>
-      <TopNavbar />
-      <Routes>
-        <Route path="/" element={<LoginButton />} />
-        <Route path="/register" element={<RegisterButton />} /> 
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/profile/settings/delete-account" element={<DeleteAccountPage />} />
-      </Routes>
-    </BrowserRouter>
+        <TopNavbar />
+        <RoutesConfig />
+      </BrowserRouter>
     </div>
   )
 }
 
-export default App; 
+export default App;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { PlusIcon, AcademicCapIcon } from "@heroicons/react/24/outline";
 import AddEducationModal from "./AddEducationModal";
-import axios from "axios";
+import { addEducation, deleteEducation, getEducationList, updateEducation } from "../../services/educationApi";
 
 const EducationManager = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -13,26 +13,22 @@ const EducationManager = () => {
   }, []);
 
   const fetchEducation = async () => {
-    const res = await axios.get("https://profile-management-backend-2jxo.onrender.com/api/education");
-    setEducationList(res.data);
+    try {
+      const data = await getEducationList();
+      setEducationList(data);
+    } catch (error) {
+      console.error("Error fetching education:", error);
+    }
   };
 
   const handleAddOrEditEducation = async (eduData) => {
     try {
       if (editingIndex !== null) {
         const id = educationList[editingIndex]._id;
-
-        await axios.put(
-          `https://profile-management-backend-2jxo.onrender.com/api/education/${id}`,
-          eduData
-        );
+        await updateEducation(id, eduData);
       } else {
-        await axios.post(
-          "https://profile-management-backend-2jxo.onrender.com/api/education",
-          eduData
-        );
+        await addEducation(eduData);
       }
-
       fetchEducation();
       setEditingIndex(null);
       setModalOpen(false);
@@ -47,19 +43,10 @@ const EducationManager = () => {
   };
 
   const handleDeleteClick = async (index) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this education?"
-    );
-
-    if (!confirmDelete) return;
-
+    if (!window.confirm("Are you sure you want to delete this education?")) return;
     try {
       const id = educationList[index]._id;
-
-      await axios.delete(
-        `https://profile-management-backend-2jxo.onrender.com/api/education/${id}`
-      );
-
+      await deleteEducation(id);
       fetchEducation();
     } catch (error) {
       console.error("Error deleting education:", error);

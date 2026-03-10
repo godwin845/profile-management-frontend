@@ -2,9 +2,6 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://profile-management-backend-2jxo.onrender.com/api",
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 export default api;

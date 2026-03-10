@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
-import axios from "axios";
 import { login } from "../redux/authSlice";
 import { useDispatch } from "react-redux";
+import { loginUser } from "../services/authApi";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -21,13 +21,7 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "https://profile-management-backend-2jxo.onrender.com/api/auth/login",
-        { email, password },
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      const { token, user } = response.data;
+      const { token, user } = await loginUser({ email, password });
 
       // Save token (and optionally user data)
       localStorage.setItem("token", token);

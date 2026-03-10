@@ -1,4 +1,4 @@
-import api from "./axios";
+import api from "./api";
 
 export const getSocialLinks = async () => {
   const res = await api.get("/social");

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { PlusIcon, BriefcaseIcon } from "@heroicons/react/24/outline";
 import AddExperienceModal from "./AddExperienceModal";
-import axios from "axios";
+import { addExperience, deleteExperience, getExperiences, updateExperience } from "../../services/experienceApi";
 
 const ExperienceManager = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -14,37 +14,27 @@ const ExperienceManager = () => {
 
   const fetchExperiences = async () => {
     try {
-      const res = await axios.get(
-        "https://profile-management-backend-2jxo.onrender.com/api/experience"
-      );
-      setExperiences(res.data);
+      const data = await getExperiences();
+      setExperiences(data);
     } catch (error) {
       console.error("Error fetching experiences", error);
     }
   };
 
   const handleAddOrEditExperience = async (data) => {
-    try {
-      if (editingIndex !== null) {
-        const id = experiences[editingIndex]._id;
-
-        await axios.put(
-          `https://profile-management-backend-2jxo.onrender.com/api/experience/${id}`,
-          data
-        );
-      } else {
-        await axios.post(
-          "https://profile-management-backend-2jxo.onrender.com/api/experience",
-          data
-        );
-      }
-
-      fetchExperiences();
-      setEditingIndex(null);
-    } catch (error) {
-      console.error("Error saving experience", error);
+  try {
+    if (editingIndex !== null) {
+      const id = experiences[editingIndex]._id;
+      await updateExperience(id, data);
+    } else {
+      await addExperience(data);
     }
-  };
+    fetchExperiences();
+    setEditingIndex(null);
+  } catch (error) {
+    console.error("Error saving experience", error);
+  }
+};
 
   const handleEditClick = (index) => {
     setEditingIndex(index);
@@ -52,24 +42,15 @@ const ExperienceManager = () => {
   };
 
   const handleDeleteClick = async (index) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this experience?"
-    );
-
-    if (!confirmDelete) return;
-
-    try {
-      const id = experiences[index]._id;
-
-      await axios.delete(
-        `https://profile-management-backend-2jxo.onrender.com/api/experience/${id}`
-      );
-
-      fetchExperiences();
-    } catch (error) {
-      console.error("Error deleting experience", error);
-    }
-  };
+  if (!window.confirm("Are you sure you want to delete this experience?")) return;
+  try {
+    const id = experiences[index]._id;
+    await deleteExperience(id);
+    fetchExperiences();
+  } catch (error) {
+    console.error("Error deleting experience", error);
+  }
+};
 
   return (
     <>

@@ -1,7 +1,7 @@
-import EducationManager from "../Pages/Education/EducationManager";
-import ExperienceManager from "../Pages/Experience/ExperienceManager";
-import CertificateManager from "../Pages/Certification/CertificateManager";
-import SkillsManager from "../Pages/Skills/SkillsManager";
+import EducationManager from "../pages/Education/EducationManager";
+import ExperienceManager from "../pages/Experience/ExperienceManager";
+import CertificateManager from "../pages/Certification/CertificateManager";
+import SkillsManager from "../pages/Skills/SkillsManager";
 
 const ProfileDetails = () => {
   return (

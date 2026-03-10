@@ -2,13 +2,19 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProfileForm from "./ProfileForm";
 import { UserIcon } from "@heroicons/react/24/solid";
-import AddSocialModal from "../Pages/SocialLinks/AddSocialModal";
-import CareerVisionModal from "../Pages/CareerVision/CareerVisionModal";
-import useSocialLinksManager from "../Pages/SocialLinks/useSocialLinksManager";
-import useCareerVisionManager from "../Pages/CareerVision/useCareerVisionManager";
-import CareerVisionCard from "../Pages/CareerVision/CareerVisionCard";
-import { getProfiles, createProfile, updateProfile } from "../api/profileApi";
+import AddSocialModal from "../pages/SocialLinks/AddSocialModal";
+import CareerVisionModal from "../pages/CareerVision/CareerVisionModal";
+import CareerVisionCard from "../pages/CareerVision/CareerVisionCard";
+import {
+  getProfiles,
+  createProfile,
+  updateProfile,
+} from "../services/profileApi";
+import useSocialLinksManager from "../hooks/useSocialLinksManager";
+import useCareerVisionManager from "../hooks/useCareerVisionManager";
+
 const Parent = () => {
+  
   const socialManager = useSocialLinksManager();
   const careerManager = useCareerVisionManager();
   const [profiles, setProfiles] = useState([]);
@@ -18,6 +24,7 @@ const Parent = () => {
   const [resumeFile, setResumeFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
+
   const emptyForm = {
     id: null,
     firstName: "",
@@ -28,6 +35,7 @@ const Parent = () => {
     profileImage: "",
     resumeFile: null,
   };
+
   const [form, setForm] = useState(emptyForm);
 
   const fetchProfiles = async () => {
@@ -62,13 +70,13 @@ const Parent = () => {
     try {
       setLoading(true);
       const formData = new FormData();
-      
+
       formData.append("firstName", form.firstName);
       formData.append("lastName", form.lastName);
       formData.append("email", form.email);
       formData.append("location", form.location);
       formData.append("bio", form.bio);
-      
+
       if (imageFile) formData.append("profileImage", imageFile);
       if (resumeFile) formData.append("resumeFile", resumeFile);
       let savedProfile;
@@ -130,7 +138,7 @@ const Parent = () => {
               <div className="flex items-center gap-4 mb-4 sm:mb-0">
                 {" "}
                 <img
-                  src={`http://localhost:5000${p.profileImage}`}
+                  src={`https://profile-management-backend-2jxo.onrender.com${p.profileImage}`}
                   alt="Profile"
                   className="w-14 h-14 rounded-full object-cover"
                 />{" "}
@@ -152,7 +160,7 @@ const Parent = () => {
                   )}{" "}
                   {p.resumeFile && (
                     <a
-                      href={`http://localhost:5000${p.resumeFile}`}
+                      href={`https://profile-management-backend-2jxo.onrender.com${p.resumeFile}`}
                       target="_blank"
                       rel="noreferrer"
                     >

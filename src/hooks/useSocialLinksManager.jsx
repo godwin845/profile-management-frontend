@@ -4,7 +4,7 @@ import {
   addSocialLink,
   updateSocialLink,
   deleteSocialLink,
-} from "../../api/socialApi";
+} from "../services/socialApi";
 
 const useSocialLinksManager = () => {
   const [socialLinks, setSocialLinks] = useState([]);
