@@ -28,12 +28,14 @@ const Parent = () => {
   const [loading, setLoading] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
 
+  const loggedInUser = JSON.parse(localStorage.getItem("user"));
+
   const emptyForm = {
     id: null,
-    firstName: "",
-    lastName: "",
-    email: "",
-    location: "",
+    firstName: loggedInUser?.firstName || "",
+    lastName: loggedInUser?.lastName || "",
+    email: loggedInUser?.email || "",
+    location: loggedInUser?.location || "",
     bio: "",
     profileImage: "",
     resumeFile: null,
@@ -61,11 +63,19 @@ const Parent = () => {
       setImageFile(null);
       setResumeFile(profile.resumeFile || null);
     } else {
-      setForm(emptyForm);
+      setForm({
+        ...emptyForm,
+        firstName: loggedInUser?.firstName || "",
+        lastName: loggedInUser?.lastName || "",
+        email: loggedInUser?.email || "",
+        location: loggedInUser?.location || "",
+      });
+
       setSelectedProfile(null);
       setImageFile(null);
       setResumeFile(null);
     }
+
     setOpen(true);
   };
 
